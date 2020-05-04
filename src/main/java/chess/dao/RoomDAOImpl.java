@@ -42,18 +42,15 @@ public class RoomDAOImpl implements RoomDAO {
     public Room findRoomById(int roomId) {
         String query = "SELECT room_id, room_name, room_color FROM room WHERE room_id = ?";
 
-        RowMapper<Room> rm = new RowMapper<Room>() {
-            @Override
-            public Room mapRow(final ResultSet rs) throws SQLException {
-                if (!rs.next()) {
-                    return null;
-                }
-                return new Room(
-                    rs.getInt("room_id"),
-                    rs.getString("room_name"),
-                    rs.getString("room_color")
-                );
+        RowMapper<Room> rm = rs -> {
+            if (!rs.next()) {
+                return null;
             }
+            return new Room(
+                rs.getInt("room_id"),
+                rs.getString("room_name"),
+                rs.getString("room_color")
+            );
         };
         JdbcTemplate jdbcTemplate = new JdbcTemplate();
         return jdbcTemplate.executeQuery(query, rm, roomId);
@@ -63,15 +60,12 @@ public class RoomDAOImpl implements RoomDAO {
     public int findRoomIdByRoomName(String roomName) {
         String query = "SELECT room_id FROM room WHERE room_name = ?";
 
-        RowMapper<Integer> rm = new RowMapper<Integer>() {
-            @Override
-            public Integer mapRow(final ResultSet rs) throws SQLException {
-                if (!rs.next()) {
-                    return 0;
-                }
-
-                return rs.getInt("room_id");
+        RowMapper<Integer> rm = rs -> {
+            if (!rs.next()) {
+                return 0;
             }
+
+            return rs.getInt("room_id");
         };
 
         JdbcTemplate jdbcTemplate = new JdbcTemplate();
@@ -82,15 +76,12 @@ public class RoomDAOImpl implements RoomDAO {
     public List<Room> findAllRoom() {
         String query = "SELECT room_id, room_name, room_color FROM room";
 
-        RowMapper<Room> rm = new RowMapper<Room>() {
-            @Override
-            public Room mapRow(final ResultSet rs) throws SQLException {
-                int roomId = rs.getInt("room_id");
-                String roomName = rs.getString("room_name");
-                String roomColor = rs.getString("room_color");
+        RowMapper<Room> rm = rs -> {
+            int roomId = rs.getInt("room_id");
+            String roomName = rs.getString("room_name");
+            String roomColor = rs.getString("room_color");
 
-                return new Room(roomId, roomName, roomColor);
-            }
+            return new Room(roomId, roomName, roomColor);
         };
         JdbcTemplate jdbcTemplate = new JdbcTemplate();
         return jdbcTemplate.executeQueryOfList(query, rm);
@@ -100,14 +91,11 @@ public class RoomDAOImpl implements RoomDAO {
     public Color findRoomColorById(int roomId) {
         String query = "SELECT room_color FROM room WHERE room_id = ?";
 
-        RowMapper<Color> rm = new RowMapper<Color>() {
-            @Override
-            public Color mapRow(final ResultSet rs) throws SQLException {
-                if (!rs.next()) {
-                    return null;
-                }
-                return Color.valueOf(rs.getString("room_color"));
+        RowMapper<Color> rm = rs -> {
+            if (!rs.next()) {
+                return null;
             }
+            return Color.valueOf(rs.getString("room_color"));
         };
 
         JdbcTemplate jdbcTemplate = new JdbcTemplate();

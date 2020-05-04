@@ -31,18 +31,15 @@ public class GameDAOImpl implements GameDAO {
     public void addAllPiecesById(int roomId, Pieces pieces) {
         String query = "INSERT INTO board(room_id, piece_name, piece_position, piece_color) VALUES (?, ?, ?, ?)";
 
-        PreparedStatementSetter pss = new PreparedStatementSetter() {
-            @Override
-            public void setParameters(final PreparedStatement pstmt) throws SQLException {
-                for (Position position : pieces.getPieces().keySet()) {
-                    Piece piece = pieces.getPieceByPosition(position);
+        PreparedStatementSetter pss = pstmt -> {
+            for (Position position : pieces.getPieces().keySet()) {
+                Piece piece = pieces.getPieceByPosition(position);
 
-                    pstmt.setInt(1, roomId);
-                    pstmt.setString(2, piece.getSymbol());
-                    pstmt.setString(3, position.getPosition());
-                    pstmt.setString(4, piece.getColor().name());
-                    pstmt.addBatch();
-                }
+                pstmt.setInt(1, roomId);
+                pstmt.setString(2, piece.getSymbol());
+                pstmt.setString(3, position.getPosition());
+                pstmt.setString(4, piece.getColor().name());
+                pstmt.addBatch();
             }
         };
         JdbcTemplate jdbcTemplate = new JdbcTemplate();
@@ -78,14 +75,11 @@ public class GameDAOImpl implements GameDAO {
     public Piece findPieceByPosition(String position) {
         String query = "SELECT piece_name FROM board WHERE piece_position = ?";
 
-        RowMapper<Piece> rm = new RowMapper<Piece>() {
-            @Override
-            public Piece mapRow(final ResultSet rs) throws SQLException {
-                if (!rs.next()) {
-                    return Blank.getInstance();
-                }
-                return PieceMapper.getInstance().findDBPiece(rs.getString("piece_name"));
+        RowMapper<Piece> rm = rs -> {
+            if (!rs.next()) {
+                return Blank.getInstance();
             }
+            return PieceMapper.getInstance().findDBPiece(rs.getString("piece_name"));
         };
 
         JdbcTemplate jdbcTemplate = new JdbcTemplate();
@@ -96,19 +90,16 @@ public class GameDAOImpl implements GameDAO {
     public Map<Position, Piece> findAllPiecesById(int roomId) {
         String query = "SELECT piece_name, piece_position, piece_color FROM board WHERE room_id = ?";
 
-        RowMapper<Map<Position, Piece>> rm = new RowMapper<Map<Position, Piece>>() {
-            @Override
-            public Map<Position, Piece> mapRow(final ResultSet rs) throws SQLException {
-                Map<Position, Piece> pieces = new HashMap<>();
+        RowMapper<Map<Position, Piece>> rm = rs -> {
+            Map<Position, Piece> pieces = new HashMap<>();
 
-                while (rs.next()) {
-                    String name = rs.getString("piece_name");
-                    String position = rs.getString("piece_position");
-                    pieces.put(Position.of(position), PieceMapper.getInstance().findDBPiece(name));
-                }
-
-                return pieces;
+            while (rs.next()) {
+                String name = rs.getString("piece_name");
+                String position = rs.getString("piece_position");
+                pieces.put(Position.of(position), PieceMapper.getInstance().findDBPiece(name));
             }
+
+            return pieces;
         };
 
         JdbcTemplate jdbcTemplate = new JdbcTemplate();
