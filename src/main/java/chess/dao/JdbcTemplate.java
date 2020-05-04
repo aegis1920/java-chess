@@ -11,33 +11,37 @@ import chess.util.JDBCConnector;
 
 public class JdbcTemplate {
 
-    public void executeUpdate(String query, Object... parameters) throws SQLException {
+    public void executeUpdate(String query, Object... parameters) {
         executeUpdate(query, createPreparedStatementSetter(parameters));
     }
 
-    public void executeUpdate(String query, PreparedStatementSetter pss) throws SQLException {
+    public void executeUpdate(String query, PreparedStatementSetter pss) {
         try (Connection con = JDBCConnector.getConnection();
              PreparedStatement pstmt = con.prepareStatement(query)
         ) {
             pss.setParameters(pstmt);
             pstmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new DataAccessException(e);
         }
     }
 
-    public void executeBatch(String query, PreparedStatementSetter pss) throws SQLException {
+    public void executeBatch(String query, PreparedStatementSetter pss) {
         try (Connection con = JDBCConnector.getConnection();
              PreparedStatement pstmt = con.prepareStatement(query)
         ) {
             pss.setParameters(pstmt);
             pstmt.executeBatch();
+        } catch (SQLException e) {
+            throw new DataAccessException(e);
         }
     }
 
-    public <T> T executeQuery(String query, RowMapper<T> rm, Object... parameters) throws SQLException {
+    public <T> T executeQuery(String query, RowMapper<T> rm, Object... parameters) {
         return executeQuery(query, rm, createPreparedStatementSetter(parameters));
     }
 
-    public <T> T executeQuery(String query, RowMapper<T> rm, PreparedStatementSetter pss) throws SQLException {
+    public <T> T executeQuery(String query, RowMapper<T> rm, PreparedStatementSetter pss) {
         List<T> list = executeQueryOfList(query, rm, pss);
         if(list.isEmpty()) {
             return null;
@@ -45,11 +49,11 @@ public class JdbcTemplate {
         return list.get(0);
     }
 
-    public <T> List<T> executeQueryOfList(String query, RowMapper<T> rm, Object... parameters) throws SQLException{
+    public <T> List<T> executeQueryOfList(String query, RowMapper<T> rm, Object... parameters) {
         return executeQueryOfList(query, rm, createPreparedStatementSetter(parameters));
     }
 
-    public <T> List<T> executeQueryOfList(String query, RowMapper<T> rm, PreparedStatementSetter pss) throws SQLException{
+    public <T> List<T> executeQueryOfList(String query, RowMapper<T> rm, PreparedStatementSetter pss) {
         try (Connection con = JDBCConnector.getConnection();
              PreparedStatement pstmt = con.prepareStatement(query)
         ) {
@@ -61,6 +65,8 @@ public class JdbcTemplate {
                 }
                 return list;
             }
+        } catch (SQLException e) {
+            throw new DataAccessException(e);
         }
     }
 

@@ -20,7 +20,7 @@ public class GameDAOImpl implements GameDAO {
     }
 
     @Override
-    public void removeAllPiecesById(int roomId) throws SQLException {
+    public void removeAllPiecesById(int roomId) {
         String query = "DELETE FROM board WHERE room_id = ?";
 
         JdbcTemplate jdbcTemplate = new JdbcTemplate();
@@ -28,7 +28,7 @@ public class GameDAOImpl implements GameDAO {
     }
 
     @Override
-    public void addAllPiecesById(int roomId, Pieces pieces) throws SQLException {
+    public void addAllPiecesById(int roomId, Pieces pieces) {
         String query = "INSERT INTO board(room_id, piece_name, piece_position, piece_color) VALUES (?, ?, ?, ?)";
 
         PreparedStatementSetter pss = new PreparedStatementSetter() {
@@ -50,7 +50,7 @@ public class GameDAOImpl implements GameDAO {
     }
 
     @Override
-    public void updatePieceByPosition(String currentPosition, String nextPosition) throws SQLException {
+    public void updatePieceByPosition(String currentPosition, String nextPosition) {
         String query = "UPDATE board SET piece_position = ? WHERE piece_position = ?";
 
         JdbcTemplate jdbcTemplate = new JdbcTemplate();
@@ -59,7 +59,7 @@ public class GameDAOImpl implements GameDAO {
     }
 
     @Override
-    public void deletePieceByPosition(String position) throws SQLException {
+    public void deletePieceByPosition(String position) {
         String query = "DELETE FROM board WHERE piece_position = ?";
 
         JdbcTemplate jdbcTemplate = new JdbcTemplate();
@@ -67,7 +67,7 @@ public class GameDAOImpl implements GameDAO {
     }
 
     @Override
-    public void addPieceByPosition(int roomId, Position position, Piece piece) throws SQLException {
+    public void addPieceByPosition(int roomId, Position position, Piece piece) {
         String query = "INSERT INTO board(room_id, piece_name, piece_position, piece_color) VALUES (?, ?, ?, ?)";
 
         JdbcTemplate jdbcTemplate = new JdbcTemplate();
@@ -75,7 +75,7 @@ public class GameDAOImpl implements GameDAO {
     }
 
     @Override
-    public Piece findPieceByPosition(String position) throws SQLException {
+    public Piece findPieceByPosition(String position) {
         String query = "SELECT piece_name FROM board WHERE piece_position = ?";
 
         RowMapper<Piece> rm = new RowMapper<Piece>() {
@@ -93,7 +93,7 @@ public class GameDAOImpl implements GameDAO {
     }
 
     @Override
-    public Map<Position, Piece> findAllPiecesById(int roomId) throws SQLException {
+    public Map<Position, Piece> findAllPiecesById(int roomId) {
         String query = "SELECT piece_name, piece_position, piece_color FROM board WHERE room_id = ?";
 
         RowMapper<Map<Position, Piece>> rm = new RowMapper<Map<Position, Piece>>() {

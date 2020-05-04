@@ -15,7 +15,7 @@ public class RoomDAOImpl implements RoomDAO {
     }
 
     @Override
-    public void addRoom(String roomName, String roomColor) throws SQLException {
+    public void addRoom(String roomName, String roomColor) {
         String query = "INSERT INTO room(room_name, room_color) VALUES (?, ?)";
 
         JdbcTemplate jdbcTemplate = new JdbcTemplate();
@@ -23,7 +23,7 @@ public class RoomDAOImpl implements RoomDAO {
     }
 
     @Override
-    public void removeRoomById(int roomId) throws SQLException {
+    public void removeRoomById(int roomId) {
         String query = "DELETE FROM room WHERE room_id = ?";
 
         JdbcTemplate jdbcTemplate = new JdbcTemplate();
@@ -31,7 +31,7 @@ public class RoomDAOImpl implements RoomDAO {
     }
 
     @Override
-    public void updateRoomColorById(int roomId, Color roomColor) throws SQLException {
+    public void updateRoomColorById(int roomId, Color roomColor) {
         String query = "UPDATE room SET room_color = ? WHERE room_id = ?";
 
         JdbcTemplate jdbcTemplate = new JdbcTemplate();
@@ -39,7 +39,7 @@ public class RoomDAOImpl implements RoomDAO {
     }
 
     @Override
-    public Room findRoomById(int roomId) throws SQLException {
+    public Room findRoomById(int roomId) {
         String query = "SELECT room_id, room_name, room_color FROM room WHERE room_id = ?";
 
         RowMapper<Room> rm = new RowMapper<Room>() {
@@ -60,7 +60,7 @@ public class RoomDAOImpl implements RoomDAO {
     }
 
     @Override
-    public int findRoomIdByRoomName(String roomName) throws SQLException {
+    public int findRoomIdByRoomName(String roomName) {
         String query = "SELECT room_id FROM room WHERE room_name = ?";
 
         RowMapper<Integer> rm = new RowMapper<Integer>() {
@@ -79,7 +79,7 @@ public class RoomDAOImpl implements RoomDAO {
     }
 
     @Override
-    public List<Room> findAllRoom() throws SQLException {
+    public List<Room> findAllRoom() {
         String query = "SELECT room_id, room_name, room_color FROM room";
 
         RowMapper<Room> rm = new RowMapper<Room>() {
@@ -97,7 +97,7 @@ public class RoomDAOImpl implements RoomDAO {
     }
 
     @Override
-    public Color findRoomColorById(int roomId) throws SQLException {
+    public Color findRoomColorById(int roomId) {
         String query = "SELECT room_color FROM room WHERE room_id = ?";
 
         RowMapper<Color> rm = new RowMapper<Color>() {

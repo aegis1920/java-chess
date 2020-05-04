@@ -7,17 +7,17 @@ import chess.domain.Color;
 import chess.domain.room.Room;
 
 public interface RoomDAO {
-    void addRoom(String roomName, String roomColor) throws SQLException;
+    void addRoom(String roomName, String roomColor);
 
-    void removeRoomById(int roomId) throws SQLException;
+    void removeRoomById(int roomId);
 
-    void updateRoomColorById(int roomId, Color roomColor) throws SQLException;
+    void updateRoomColorById(int roomId, Color roomColor);
 
-    Room findRoomById(int roomId) throws SQLException;
+    Room findRoomById(int roomId);
 
-    int findRoomIdByRoomName(String roomName) throws SQLException;
+    int findRoomIdByRoomName(String roomName);
 
-    List<Room> findAllRoom() throws SQLException;
+    List<Room> findAllRoom();
 
-    Color findRoomColorById(int roomId) throws SQLException;
+    Color findRoomColorById(int roomId);
 }
