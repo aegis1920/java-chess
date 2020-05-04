@@ -4,7 +4,9 @@ import java.sql.SQLException;
 import java.util.List;
 
 import chess.dao.GameDAO;
+import chess.dao.GameDAOImpl;
 import chess.dao.RoomDAO;
+import chess.dao.RoomDAOImpl;
 import chess.domain.Color;
 import chess.domain.GameManager;
 import chess.domain.PieceScore;
@@ -23,8 +25,8 @@ public class GameService {
 	}
 
 	public void initialize(int roomId) throws SQLException {
-		GameDAO gameDAO = GameDAO.getInstance();
-		RoomDAO roomDAO = RoomDAO.getInstance();
+		GameDAO gameDAO = GameDAOImpl.getInstance();
+		RoomDAO roomDAO = RoomDAOImpl.getInstance();
 
 		roomDAO.updateRoomColorById(roomId, Color.WHITE);
 		Pieces pieces = new Pieces(Pieces.initPieces());
@@ -32,8 +34,8 @@ public class GameService {
 	}
 
 	public void movePiece(int roomId, String sourcePosition, String targetPosition) throws SQLException {
-		GameDAO gameDAO = GameDAO.getInstance();
-		RoomDAO roomDAO = RoomDAO.getInstance();
+		GameDAO gameDAO = GameDAOImpl.getInstance();
+		RoomDAO roomDAO = RoomDAOImpl.getInstance();
 
 		Pieces pieces = new Pieces(gameDAO.findAllPiecesById(roomId));
 		GameManager gameManager = new GameManager(pieces, roomDAO.findRoomColorById(roomId));
@@ -45,7 +47,7 @@ public class GameService {
 	}
 
 	public double getScore(int roomId, Color color) throws SQLException {
-		GameDAO gameDAO = GameDAO.getInstance();
+		GameDAO gameDAO = GameDAOImpl.getInstance();
 		Pieces pieces = new Pieces(gameDAO.findAllPiecesById(roomId));
 		GameManager gameManager = new GameManager(pieces, color);
 
@@ -53,14 +55,14 @@ public class GameService {
 	}
 
 	public PiecesResponseDTO getPiecesResponseDTO(int roomId) throws SQLException {
-		GameDAO gameDAO = GameDAO.getInstance();
+		GameDAO gameDAO = GameDAOImpl.getInstance();
 		Pieces pieces = new Pieces(gameDAO.findAllPiecesById(roomId));
 		return new PiecesResponseDTO(pieces);
 	}
 
 	public boolean isKingDead(final int roomId) throws SQLException {
-		GameDAO gameDAO = GameDAO.getInstance();
-		RoomDAO roomDAO = RoomDAO.getInstance();
+		GameDAO gameDAO = GameDAOImpl.getInstance();
+		RoomDAO roomDAO = RoomDAOImpl.getInstance();
 
 		Pieces pieces = new Pieces(gameDAO.findAllPiecesById(roomId));
 		GameManager gameManager = new GameManager(pieces, roomDAO.findRoomColorById(roomId));
@@ -68,13 +70,13 @@ public class GameService {
 	}
 
 	public String getCurrentColor(final int roomId) throws SQLException {
-		RoomDAO roomDAO = RoomDAO.getInstance();
+		RoomDAO roomDAO = RoomDAOImpl.getInstance();
 		return roomDAO.findRoomColorById(roomId).name();
 	}
 
 	public List<String> getMovablePositions(final int roomId, final String sourcePosition) throws SQLException {
-		GameDAO gameDAO = GameDAO.getInstance();
-		RoomDAO roomDAO = RoomDAO.getInstance();
+		GameDAO gameDAO = GameDAOImpl.getInstance();
+		RoomDAO roomDAO = RoomDAOImpl.getInstance();
 
 		Pieces pieces = new Pieces(gameDAO.findAllPiecesById(roomId));
 		GameManager gameManager = new GameManager(pieces, roomDAO.findRoomColorById(roomId));

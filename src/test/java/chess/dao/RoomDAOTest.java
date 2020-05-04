@@ -7,19 +7,20 @@ import java.sql.SQLException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 
-import chess.AutoIncrementTest;
 import chess.domain.Color;
 import chess.domain.room.Room;
 
 public class RoomDAOTest {
-	private RoomDAO roomDAO = RoomDAO.getInstance();
+	@Mock
+	private RoomDAO roomDAO;
 
 	@BeforeEach
 	void setUp() throws SQLException {
 		int roomId = roomDAO.findRoomIdByRoomName("hello world");
 		roomDAO.removeRoomById(roomId);
-		AutoIncrementTest.applyAutoIncrementToZero();
+		AutoIncrement.applyAutoIncrementToZero();
 	}
 
 	@DisplayName("auto increment를 1로 초기화하는 테스트")

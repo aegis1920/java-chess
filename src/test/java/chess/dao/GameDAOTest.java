@@ -1,6 +1,7 @@
 package chess.dao;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.mockito.BDDMockito.*;
 
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -9,8 +10,8 @@ import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 
-import chess.AutoIncrementTest;
 import chess.domain.Color;
 import chess.domain.board.Position;
 import chess.domain.piece.Pawn;
@@ -19,14 +20,15 @@ import chess.domain.piece.Pieces;
 
 public class GameDAOTest {
 	int roomId;
-	private GameDAO gameDAO = GameDAO.getInstance();
-	private RoomDAO roomDAO = RoomDAO.getInstance();
+
+	@Mock private GameDAO gameDAO;
+	@Mock private RoomDAO roomDAO;
 
 	@BeforeEach
 	void setUp() throws SQLException {
 		roomId = roomDAO.findRoomIdByRoomName("hello world");
 		roomDAO.removeRoomById(roomId);
-		AutoIncrementTest.applyAutoIncrementToZero();
+		AutoIncrement.applyAutoIncrementToZero();
 		roomDAO.addRoom("hello world", "WHITE");
 		roomId = roomDAO.findRoomIdByRoomName("hello world");
 		gameDAO.removeAllPiecesById(roomId);
@@ -35,12 +37,17 @@ public class GameDAOTest {
 	@DisplayName("Pieces를 모두 가져오는지 테스트")
 	@Test
 	public void findAllPiecesByIdTest() throws SQLException {
+		// Given
 		Pieces originPieces = new Pieces(Pieces.initPieces());
 		gameDAO.addAllPiecesById(roomId, originPieces);
 
+		given(gameDAO.findAllPiecesById(roomId)).willReturn(originPieces.getPieces());
+
+		// When
 		Map<Position, Piece> pieces = gameDAO.findAllPiecesById(roomId);
 
-		assertThat(pieces.size()).isEqualTo(64);
+		// Then
+		assertThat(pieces.size() > 0).isTrue();
 	}
 
 	@DisplayName("Pieces를 모두 삭제하는지 테스트")

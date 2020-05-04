@@ -9,7 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import chess.AutoIncrementTest;
+import chess.dao.AutoIncrement;
 import chess.domain.room.Room;
 
 public class RoomServiceTest {
@@ -20,7 +20,7 @@ public class RoomServiceTest {
 	void setUp() throws SQLException {
 		roomId = 1;
 		roomService.removeRoom(roomId);
-		AutoIncrementTest.applyAutoIncrementToZero();
+		AutoIncrement.applyAutoIncrementToZero();
 	}
 
 	@DisplayName("방을 추가하는 메서드 테스트")

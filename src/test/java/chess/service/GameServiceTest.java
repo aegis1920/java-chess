@@ -9,24 +9,26 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import chess.AutoIncrementTest;
+import chess.dao.AutoIncrement;
 import chess.dao.GameDAO;
+import chess.dao.GameDAOImpl;
 import chess.dao.RoomDAO;
+import chess.dao.RoomDAOImpl;
 import chess.domain.Color;
 import chess.domain.board.Position;
 import chess.domain.piece.Piece;
 
 public class GameServiceTest {
 	private GameService gameService = GameService.getInstance();
-	private GameDAO gameDAO = GameDAO.getInstance();
-	private RoomDAO roomDAO = RoomDAO.getInstance();
+	private GameDAO gameDAO = GameDAOImpl.getInstance();
+	private RoomDAO roomDAO = RoomDAOImpl.getInstance();
 	private int roomId;
 
 	@BeforeEach
 	void setUp() throws SQLException {
 		roomId = roomDAO.findRoomIdByRoomName("hello world");
 		roomDAO.removeRoomById(roomId);
-		AutoIncrementTest.applyAutoIncrementToZero();
+		AutoIncrement.applyAutoIncrementToZero();
 		roomDAO.addRoom("hello world", "WHITE");
 		roomDAO.findRoomIdByRoomName("hello world");
 		roomId = roomDAO.findRoomIdByRoomName("hello world");
