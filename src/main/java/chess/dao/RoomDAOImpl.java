@@ -1,7 +1,5 @@
 package chess.dao;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 
 import chess.domain.Color;
@@ -42,16 +40,11 @@ public class RoomDAOImpl implements RoomDAO {
     public Room findRoomById(int roomId) {
         String query = "SELECT room_id, room_name, room_color FROM room WHERE room_id = ?";
 
-        RowMapper<Room> rm = rs -> {
-            if (!rs.next()) {
-                return null;
-            }
-            return new Room(
-                rs.getInt("room_id"),
-                rs.getString("room_name"),
-                rs.getString("room_color")
-            );
-        };
+        RowMapper<Room> rm = rs -> new Room(
+            rs.getInt("room_id"),
+            rs.getString("room_name"),
+            rs.getString("room_color")
+        );
         JdbcTemplate jdbcTemplate = new JdbcTemplate();
         return jdbcTemplate.executeQuery(query, rm, roomId);
     }
@@ -60,13 +53,7 @@ public class RoomDAOImpl implements RoomDAO {
     public int findRoomIdByRoomName(String roomName) {
         String query = "SELECT room_id FROM room WHERE room_name = ?";
 
-        RowMapper<Integer> rm = rs -> {
-            if (!rs.next()) {
-                return 0;
-            }
-
-            return rs.getInt("room_id");
-        };
+        RowMapper<Integer> rm = rs -> rs.getInt("room_id");
 
         JdbcTemplate jdbcTemplate = new JdbcTemplate();
         return jdbcTemplate.executeQuery(query, rm, roomName);
@@ -91,12 +78,7 @@ public class RoomDAOImpl implements RoomDAO {
     public Color findRoomColorById(int roomId) {
         String query = "SELECT room_color FROM room WHERE room_id = ?";
 
-        RowMapper<Color> rm = rs -> {
-            if (!rs.next()) {
-                return null;
-            }
-            return Color.valueOf(rs.getString("room_color"));
-        };
+        RowMapper<Color> rm = rs -> Color.valueOf(rs.getString("room_color"));
 
         JdbcTemplate jdbcTemplate = new JdbcTemplate();
         return jdbcTemplate.executeQuery(query, rm, roomId);

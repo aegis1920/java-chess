@@ -10,7 +10,6 @@ import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 
 import chess.domain.Color;
 import chess.domain.board.Position;
@@ -19,10 +18,10 @@ import chess.domain.piece.Piece;
 import chess.domain.piece.Pieces;
 
 public class GameDAOTest {
-	int roomId;
 
-	@Mock private GameDAO gameDAO;
-	@Mock private RoomDAO roomDAO;
+	private GameDAO gameDAO = new GameDAOImpl();
+	private RoomDAO roomDAO = new RoomDAOImpl();
+	private int roomId = 1;
 
 	@BeforeEach
 	void setUp() throws SQLException {

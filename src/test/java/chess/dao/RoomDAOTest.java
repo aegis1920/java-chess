@@ -7,14 +7,13 @@ import java.sql.SQLException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 
 import chess.domain.Color;
 import chess.domain.room.Room;
 
 public class RoomDAOTest {
-	@Mock
-	private RoomDAO roomDAO;
+
+	private RoomDAO roomDAO = new RoomDAOImpl();
 
 	@BeforeEach
 	void setUp() throws SQLException {

@@ -71,9 +71,7 @@ public class GameService {
 
     public String getCurrentColor(final int roomId) {
         RoomDAO roomDAO = RoomDAOImpl.getInstance();
-        String hi = roomDAO.findRoomColorById(roomId).name();
-        System.out.println("hi : " + hi);
-        return hi;
+        return roomDAO.findRoomColorById(roomId).name();
     }
 
     public List<String> getMovablePositions(final int roomId, final String sourcePosition) throws SQLException {
